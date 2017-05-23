@@ -1,0 +1,130 @@
+a {
+	font-family:Helvetica,Arial,sans-serif;
+	color:#333;
+	text-decoration:none;
+}
+#a:hover {
+	color:#5BC0DE;
+}
+button, input, textarea, select {
+	margin:3px;
+	padding:3px;
+	text-decoration:none;
+	border:1px solid black;
+	border-radius:3px;
+	background-color:white;
+	color:black;
+}
+button:hover {
+	border:1px solid #5BC0DE;
+	background-color:#5BC0DE;
+	color:white;
+}
+h2 {
+	font-family:segoeui,candara,calibri;
+	color:#333;
+	padding-left:10px;
+}
+h3 {
+	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+	color:#333;
+	padding-left:10px;
+}
+p {
+	font-family:Helvetica,Arial,sans-serif;
+	color:#333;
+}
+table, th, td {
+	font-family:Helvetica,Arial,sans-serif;
+	font-size:14px;
+	color:#333;
+}
+th {
+    background-color:#5BC0DE;
+    color:white;
+}
+body {
+	padding:0;
+	margin:0;
+	background-color:#E6E6FA;
+}
+.container{
+	width:900px;
+	margin:0 auto;
+	margin-top:10px;
+	margin-bottom:10px;
+	background-color:white;
+	border:1px solid black;
+	border-radius:3px;	
+}
+#head {
+	border-bottom:4px solid #5BC0DE;	
+}
+#menu {
+	padding:3px;
+	margin:3px;
+}
+#menu li {
+	display:inline;
+	list-style:none;
+}
+#menu a {
+	margin:3px;
+	padding:3px;
+	text-decoration:none;
+	border:1px solid black;
+	border-radius:3px;
+	background-color:white;
+	color:black;
+}
+#menu a:hover {
+	border:1px solid #5BC0DE;
+	background-color:#5BC0DE;
+	color:white;
+}
+#content {
+	padding:10px;
+	margin:0 auto;
+}
+#red_btn a {
+	margin:3px;
+	padding:3px;
+	text-decoration:none;
+	border:1px solid black;
+	border-radius:3px;
+	background-color:white;
+	color:black;
+}
+#red_btn a:hover {
+	border:1px solid #D9534F;
+	background-color:#D9534F;
+	color:white;
+}
+#search {
+	float:right;
+	margin:5px;
+	padding:5px;
+}
+#search input {
+	width:150px;
+	height:20px;
+	padding:3px;
+	border:1px solid #333;
+	border-radius:3px;	
+}
+#search button {
+	padding:5px;
+	border:1px solid #333;
+	border-radius:3px;
+	background-color:white;
+}
+#search button:hover {
+	border:1px solid #5BC0DE;
+	background-color:#5BC0DE;
+	color:white;	
+}
+#delete {
+	color:#D9534F;
+	font-family:tahoma,arial,courier;
+	font-size:120%;
+}
