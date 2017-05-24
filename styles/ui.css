@@ -8,7 +8,7 @@
 	width:150px;
 	padding:4px;
 	border:1px solid #777;
-	border-radius:3px;	
+	border-radius:3px;
 }
 #search button {
 	padding:4px;
@@ -20,7 +20,7 @@
 #search button:hover {
 	border:1px solid #777;
 	background-color:#5BC0DE;
-	color:#fff;	
+	color:#fff;
 }
 #msg {
 	width:500px;
@@ -42,7 +42,7 @@
 #href_btn a:hover {
 	border:1px solid #428BCA;
 	background-color:#428BCA;
-	color:white;	
+	color:white;
 }
 #cancel_btn a {
 	float:right;
@@ -57,7 +57,7 @@
 #cancel_btn a:hover {
 	border:1px solid #5CB85C;
 	background-color:#5CB85C;
-	color:white;	
+	color:white;
 }
 #delete_btn button {
 	float:right;
@@ -72,7 +72,7 @@
 #delete_btn button:hover {
 	border:1px solid #D9534F;
 	background-color:#D9534F;
-	color:white;	
+	color:white;
 }
 
 /* search user styles */
@@ -88,7 +88,7 @@
 #green_btn button:hover {
 	border:1px solid #5CB85C;
 	background-color:#5CB85C;
-	color:white;	
+	color:white;
 }
 #blue_btn button {
 	margin-top:3px;
@@ -101,7 +101,7 @@
 #blue_btn button:hover {
 	border:1px solid #5BC0DE;
 	background-color:#5BC0DE;
-	color:white;	
+	color:white;
 }
 
 /* profile styles */
@@ -140,7 +140,7 @@
 #reply_button button:hover {
 	border:1px solid #5BC0DE;
 	background-color:#5BC0DE;
-	color:white;	
+	color:white;
 }
 #edit_button button {
 	float:right;
@@ -154,7 +154,7 @@
 #edit_button button:hover {
 	border:1px solid #5CB85C;
 	background-color:#5CB85C;
-	color:white;	
+	color:white;
 }
 #delete_button button {
 	float:right;
@@ -168,7 +168,7 @@
 #delete_button button:hover {
 	border:1px solid #D9534F;
 	background-color:#D9534F;
-	color:white;	
+	color:white;
 }
 #topics_button button {
 	padding:3px;
@@ -181,7 +181,7 @@
 #topics_button button:hover {
 	border:1px solid #5BC0DE;
 	background-color:#5BC0DE;
-	color:#fff;	
+	color:#fff;
 }
 #pagination a {
 	margin:3px;
@@ -195,7 +195,7 @@
 #pagination a:hover {
 	border:1px solid #5BC0DE;
 	background-color:#5BC0DE;
-	color:white;	
+	color:white;
 }
 #success {
 	color:#5CB85C;

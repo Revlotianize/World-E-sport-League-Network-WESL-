@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	session_start();
 	include("wesl.core.functions.php");
@@ -6,7 +6,7 @@
 		header("location:index.php");
 	}
 	else {
-	
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,11 +36,11 @@
 			<article>
 				<h3><?php echo $lang['TEAMS_CONTENT_TITLE']; ?></h3>
 				<hr />
-				<p>In progress</p>
+				<?php getTeams(); ?>
 			</article>
 		</section>
 		<?php include("template/footer.html"); ?>
-	</main>		
+	</main>
 </body>
 </html>
 <?php } ?>

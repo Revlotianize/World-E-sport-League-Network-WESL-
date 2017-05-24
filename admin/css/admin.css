@@ -55,10 +55,10 @@ body {
 	margin-bottom:10px;
 	background-color:white;
 	border:1px solid black;
-	border-radius:3px;	
+	border-radius:3px;
 }
 #head {
-	border-bottom:4px solid #5BC0DE;	
+	border-bottom:4px solid #5BC0DE;
 }
 #menu {
 	padding:3px;
@@ -110,7 +110,7 @@ body {
 	height:20px;
 	padding:3px;
 	border:1px solid #333;
-	border-radius:3px;	
+	border-radius:3px;
 }
 #search button {
 	padding:5px;
@@ -121,7 +121,7 @@ body {
 #search button:hover {
 	border:1px solid #5BC0DE;
 	background-color:#5BC0DE;
-	color:white;	
+	color:white;
 }
 #delete {
 	color:#D9534F;

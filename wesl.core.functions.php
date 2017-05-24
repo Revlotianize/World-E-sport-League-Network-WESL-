@@ -825,6 +825,66 @@
 			}
 		}
 
+		# teams.php
+		function getTeams(){
+
+		global $con;
+
+			$get_teams = "select * from teams;";
+			$run_teams = mysqli_query($con,$get_teams);
+
+			while($row	= mysqli_fetch_array($run_teams)){
+
+			$team_id 		= $row['team_id'];
+			$team_name 		= $row['team_name'];
+			$team_desc 	= $row['description'];
+			$profile_image 	= $row['profile_image'];
+			if($profile_image==""){
+				$profile_image='default.jpg';
+			}
+
+				echo "	<p><img src='images/team_images/$profile_image' width='50' height='50'></p>
+						<br />
+						<h3><a href='team.php?t_id=$team_id'>$team_name</a></h3>
+						<p></p>
+						<br /><br>
+						<br />";
+			}
+		}
+
+		# my_teams.php
+		function getMyTeams(){
+
+		global $con;
+		$user			= $_SESSION['user_email'];
+		$get_user 		= "select * from users where user_email='$user'";
+		$run_user 		= mysqli_query($con, $get_user);
+		$row			= mysqli_fetch_array($run_user);
+
+		$user_id		= $row['user_id'];
+
+			$get_teams = "select * from teams where creator_id={$user_id};";
+			$run_teams = mysqli_query($con,$get_teams);
+
+			while($row	= mysqli_fetch_array($run_teams)){
+
+			$team_id 		= $row['team_id'];
+			$team_name 		= $row['team_name'];
+			$team_desc 	= $row['description'];
+			$profile_image 	= $row['profile_image'];
+			if($profile_image==""){
+				$profile_image='default.jpg';
+			}
+
+				echo "	<p><img src='images/team_images/$profile_image' width='50' height='50'></p>
+						<br />
+						<h3><a href='team.php?t_id=$team_id'>$team_name</a></h3>
+						<p></p>
+						<br /><br>
+						<br />";
+			}
+		}
+
 		# searchusers.php
 		function searchUsers(){
 
@@ -909,6 +969,33 @@
 						<p><b>Last Login:</b> $last_login </p>
 						<p><b>Member Since:</b> $register_date</p>
 						<a href='send_message.php?u_id=$user_id'><button>{$lang['SEND_MSG']}</button></a>";
+			}
+		}
+
+		#team.php
+		function teamProfile(){
+
+		global $con;
+		global $lang;
+
+			if(isset($_GET['t_id'])){
+
+				$team_id = $_GET['t_id'];
+
+				$select = "select * from teams where team_id='$team_id'";
+				$run = mysqli_query($con,$select);
+				$row=mysqli_fetch_array($run);
+
+				$team_id		= $row['team_id'];
+				$image 			= $row['profile_image'];
+				$name		 	= $row['team_name'];
+				$description 		= $row['description'];
+
+				echo "	<p class='clearfix'><img src='images/team_images/$image' width='100' height='100' /></p>
+						<br />
+						<p><h3><b>$name</b></h3> </p>
+						<p>$description</p><br>
+						<a href='edit_team.php?t_id=$team_id'><button>{$lang['EDIT_TEAM']}</button></a>";
 			}
 		}
 
@@ -1154,6 +1241,145 @@
 						echo("<meta http-equiv='refresh' content='2'>");
 					}
 				}
+			}
+		}
+
+		# create_team.php
+		function createTeam(){
+
+		global $con;
+		global $lang;
+
+			$user			= $_SESSION['user_email'];
+			$get_user 		= "select * from users where user_email='$user'";
+			$run_user 		= mysqli_query($con, $get_user);
+			$row			= mysqli_fetch_array($run_user);
+
+			$user_id		= $row['user_id'];
+
+			echo "	<form action='' method='post' enctype='multipart/form-data'>
+					<table>
+						<tr>
+							<td>Team Name:</td>
+							<td><div><input type='text' name='t_name'/></div></td>
+						</tr>
+						<tr>
+							<td>Description:</td>
+							<td><textarea type='text' name='team_desc_content' autocomplete='off' required='required'></textarea></td>
+						</tr>
+						<tr>
+							<td>Profile Image:</td>
+							<td>
+								<div id='file'><input type='file' name='t_image' value=''/></div>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<button name='create'>{$lang['CREATE_TEAM']}</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+				<br />";
+
+			if(isset($_POST['create'])){
+
+				$team_name 	= htmlentities($_POST['t_name']);
+				$team_desc 		= htmlentities($_POST['team_desc_content']);
+				$t_image 		= $_FILES['t_image']['name'];
+				$image_tmp 		= $_FILES['t_image']['tmp_name'];
+
+				move_uploaded_file($image_tmp,"images/team_images/$t_image");
+
+				if(empty($_FILES['t_image']['name'])){
+					$t_image = "";
+				}
+
+				$create = "insert into teams (team_name, description, creator_id, created_at, profile_image) values ('$team_name', '$team_desc', '$user_id',NOW(), '$t_image')";
+				//echo $create; exit(0);
+				$run = mysqli_query($con, $create);
+
+				if($run){
+
+					echo "<div id='success'>{$lang['CREATE_TEAM_SUCCESS']}</div><br />";
+					echo("<meta http-equiv='refresh' content='2'>");
+				}
+
+			}
+		}
+
+		# update_team.php
+		function updateTeam(){
+
+		global $con;
+		global $lang;
+		if(isset($_GET['t_id'])){
+			$team_id = $_GET['t_id'];
+			$user			= $_SESSION['user_email'];
+			$get_user 		= "select * from users where user_email='$user'";
+			$run_user 		= mysqli_query($con, $get_user);
+			$row			= mysqli_fetch_array($run_user);
+			$user_id		= $row['user_id'];
+
+			$get_team 		= "select * from teams where team_id='$team_id' and creator_id='$user_id'";
+			$run_team 		= mysqli_query($con, $get_team);
+			$row			= mysqli_fetch_array($run_team);
+
+			$team_id = $row['team_id'];
+			$team_name = $row['team_name'];
+			$team_desc = $row['description'];
+			$profile_image = $row['profile_image'];
+
+			echo "	<form action='' method='post' enctype='multipart/form-data'>
+					<table>
+						<tr>
+							<td>Team Name:</td>
+							<td><div><input type='text' name='t_name' value='{$team_name}'/></div></td>
+						</tr>
+						<tr>
+							<td>Description:</td>
+							<td><textarea type='text' name='team_desc_content' autocomplete='off' required='required'>{$team_desc}</textarea></td>
+						</tr>
+						<tr>
+							<td>Profile Image:</td>
+							<td>
+								<div id='file'><input type='file' name='t_image' value=''/></div>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td>
+								<button name='update'>{$lang['UPDATE_TEAM']}</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+				<br />";
+			}
+			if(isset($_POST['update'])){
+
+				$team_name 	= htmlentities($_POST['t_name']);
+				$team_desc 		= htmlentities($_POST['team_desc_content']);
+				$t_image 		= $_FILES['t_image']['name'];
+				$image_tmp 		= $_FILES['t_image']['tmp_name'];
+
+				move_uploaded_file($image_tmp,"images/team_images/$t_image");
+
+				if(empty($_FILES['t_image']['name'])){
+					$t_image = $profile_image;
+				}
+
+				$update = "update teams set team_name='$team_name', description='$team_desc', updated_at=NOW(), profile_image='$t_image' where team_id='$team_id' and creator_id='$user_id'";
+				//echo $update; exit(0);
+				$run = mysqli_query($con, $update);
+
+				if($run){
+
+					echo "<div id='success'>{$lang['UPDATE_TEAM_SUCCESS']}</div><br />";
+					echo("<meta http-equiv='refresh' content='2'>");
+				}
+
 			}
 		}
 

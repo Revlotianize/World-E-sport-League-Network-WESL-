@@ -1,9 +1,9 @@
 <?php
 
 	# ENGLISH
-	
+
 	$lang = array();
-	
+
 	# PAGE TITLE
 	$lang['PAGE_TITLE'] = 'WeSL';
 	$lang['PAGE_TITLE_USERLIST'] = 'WeSL - User list';
@@ -19,13 +19,13 @@
 	$lang['PAGE_TITLE_EDIT_PROFILE'] = 'WeSL - Edit Profile';
 	$lang['PAGE_TITLE_MESSAGES'] = 'WeSL - Messages';
 	$lang['PAGE_TITLE_MYMESSAGES'] = 'WeSL - My Messages';
-	
+
 	# GENERAL
 	$lang['USER_NAME_STRING'] = 'Name:';
 	$lang['USER_COUNTRY_STRING'] = 'Country:';
 	$lang['REGISTER_DATE_STRING'] = 'Member Since:';
 	$lang['LAST_LOGIN_STRING'] = 'Last Visit:';
-	
+
 	# MENU
 	$lang['MENU_HOME'] = 'Home';
 	$lang['MENU_USERLIST'] = 'Users';
@@ -38,7 +38,7 @@
 	$lang['MENU_EDIT_PROFILE'] = 'Edit Profile';
 	$lang['MENU_EDIT_ACCOUNT'] = 'Edit Account';
 	$lang['MENU_LOGOUT'] = 'Logout';
-	
+
 	# UI / BUTTONS
 	$lang['POST_BUTTON'] = 'Post!';
 	$lang['UPDATE_BUTTON'] = 'Update!';
@@ -57,7 +57,10 @@
 	$lang['MSG_STATUS_READ'] = 'Read';
 	$lang['MSG_STATUS_UNREAD'] = 'Unread';
 	$lang['MSG_STATUS_REPLY'] = 'Replyed';
-	
+	$lang['CREATE_TEAM'] = 'Create Team';
+	$lang['UPDATE_TEAM'] = 'Update Team';
+	$lang['EDIT_TEAM'] = 'Edit Team Details';
+
 	# ERROR / SUCCESS MESSAGES
 	$lang['POST_TIMELINE_SUCCESS'] = 'Posted to timeline!';
 	$lang['POST_TIMELINE_ERROR'] = 'There was nothing posted to timeline...';
@@ -76,13 +79,15 @@
 	$lang['SEND_MESSAGE_ERROR3'] = 'ERROR';
 	$lang['SHOW_MESSAGE_ERROR1'] = 'ERROR';
 	$lang['REPLY_MESSAGE_ERROR1'] = 'Please enter a reply';
-	
+	$lang['CREATE_TEAM_SUCCESS'] = 'Team created successfully!';
+	$lang['UPDATE_TEAM_SUCCESS'] = 'Team updated successfully!';
+
 	# SEARCH TEMPLATE
 	$lang['SEARCH_BUTTON'] = 'Search';
 	$lang['SEARCH_PLACEHOLDER'] = 'Search topics';
 	$lang['SEARCH_USERS_BUTTON'] = 'Search';
 	$lang['SEARCH_USERS_PLACEHOLDER'] = 'Search users';
-	
+
 	# CONTENT
 	$lang['CONTENT_TIMELINE_TITLE'] = 'What is on your mind?';
 	$lang['TEAMS_CONTENT_TITLE'] = 'Teams';
@@ -98,9 +103,13 @@
 	$lang['DELETE_POST_CONTENT_TITLE'] = 'Delete Post';
 	$lang['SEARCH_CONTENT_TITLE'] = 'Search results for ';
 	$lang['EDIT_PROFILE_CONTENT_TITLE'] = 'Edit Profile';
+	$lang['CREATE_TEAM_CONTENT_TITLE'] = 'Create Team';
+	$lang['EDIT_TEAM_CONTENT_TITLE'] = 'Edit Team Team';
 	$lang['EDIT_POST_CONTENT_TITLE'] = 'Edit Post';
 	$lang['MESSAGES_CONTENT_TITLE'] = 'Messages';
 	$lang['MESSAGES_IN_CONTENT_TITLE'] = 'Inbox';
 	$lang['MESSAGES_OUT_CONTENT_TITLE'] = 'Outbox';
+	$lang['TEAM_CONTENT_TITLE'] = 'Team Details';
+	$lang['TEAM_MEMBERS_TITLE'] = 'Team Members';
 
 ?>
