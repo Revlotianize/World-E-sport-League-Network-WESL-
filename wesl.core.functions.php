@@ -44,7 +44,9 @@
 				$check 		= mysqli_num_rows($run_user);
 
 				if($check==1){
+					$users = mysqli_fetch_array($run_user);
 					$_SESSION['user_email']=$email;
+					$_SESSION['user_id']=$users['user_id'];
 					echo "<script>window.open('index.php','_self')</script>";
 					#echo "<meta http-equiv='refresh' content='0'>";
 				}
@@ -851,6 +853,169 @@
 						<br />";
 			}
 		}
+		# teams.php
+		function getTeamMembers(){
+
+		global $con;
+		if(isset($_GET['t_id'])){
+				$myId = $_SESSION['user_id'];
+				$team_id = $_GET['t_id'];
+				$iAmAdmin = false;
+				$get_tms = "select user_name, user_email, users.user_id as user_id, role,
+				first_name, last_name, user_image, team_id from team_members JOIN users ON team_members.user_id=users.user_id and team_id={$team_id}";
+				$run_tms = mysqli_query($con,$get_tms);
+				while($row = mysqli_fetch_array($run_tms)){
+					if($row['user_id'] == $myId && $row['role'] == 1){
+						$iAmAdmin = true;
+					}
+					$members[] = $row;
+				}
+				//print_r($members); exit(0);
+
+				foreach($members as $row){
+
+				$team_id 		= $row['team_id'];
+				$user_name 		= $row['user_name'];
+				$user_image 	= $row['user_image'];
+				$user_id 	= $row['user_id'];
+				$user_email 	= $row['user_email'];
+				$first_name 	= $row['first_name'];
+				$last_name 	= $row['first_name'];
+				$role 	= $row['role'];
+				if($user_image==""){
+					$user_image='default.jpg';
+				}
+				$str = "	<p><img src='images/user_images/$user_image' width='50' height='50'></p>
+						<br />
+						<h3><a href='user_profile.php?u_id=$user_id'>$user_name</a>";
+				if($role == 1){
+					$str .= " <span class='small'>(Admin)</span>";
+				}
+				$str .= "</h3>";
+				if($iAmAdmin && $user_id != $myId){
+					$str .= "<div class='action-links'>
+						<a href='remove_member.php?u_id={$user_id}&t_id=$team_id'>Remove</a>&nbsp;.&nbsp;<a href='make_member_admin.php?u_id={$user_id}&t_id=$team_id'>Make Admin</a>&nbsp;.&nbsp;
+					</div>";
+				} else if($user_id == $myId){
+					$str .= "<div class='action-links'>
+						<a>Leave Group</a>
+					</div>";
+				}
+				$str .= "<p></p>
+				<br /><br>
+				<br />";
+				echo $str;
+				}
+			}
+		}
+
+		#remove_member.php
+		function removeTeamMember(){
+
+			global $con;
+			global $lang;
+
+			if(isset($_GET['u_id']) && isset($_GET['t_id'])){
+				$userId = $_GET['u_id'];
+				$teamId = $_GET['t_id'];
+				$myId = $_SESSION['user_id'];
+				$get_role = "select role from team_members where user_id='$myId' and team_id='$teamId'";
+				$run_role = mysqli_query($con, $get_role);
+				if(mysqli_num_rows($run_role) == 1){
+					$row_role=mysqli_fetch_array($run_role);
+					if($row_role['role'] != 1){
+						echo "<div id='error'>{$lang['NO_PERMISSION']}</div>";
+						exit;
+					}
+				} else {
+					echo "<div id='error'>{$lang['NO_PERMISSION']}</div>";
+					exit;
+				}
+			}
+
+				$get_user 		= "select * from users where user_id='$userId'";
+				$run_user 		= mysqli_query($con, $get_user);
+				$row			= mysqli_fetch_array($run_user);
+
+				$user_name		= $row['user_name'];
+				$user_image		= $row['user_image'];
+
+			echo "	<p><img src='images/user_images/$user_image' width='60' height='60'></p>
+					<h2 style='margin-top:10px;'>$user_name</h2><br>
+					<h3>{$lang['MEMBER_REMOVE_CONFIRM']}</h3>
+					<br />
+					<form action='' method='post'
+					<div id='delete_btn'><button name='delete'>{$lang['REMOVE_BUTTON']}</button></div>
+					<div id='cancel_btn'><a href='team.php?t_id=$teamId'>{$lang['CANCEL_BUTTON']}</a></div>
+					</form>
+					<br />
+					<br />";
+
+			if(isset($_POST['delete'])){
+
+				$remove_user = "delete from team_members where team_id='$teamId' and user_id='$userId'";
+				$run_delete = mysqli_query($con, $remove_user);
+
+				if($run_delete){
+				echo "<div id='success'>{$lang['USER_REMOVED_FROM_TEAM']}</div><br />";
+				echo("<meta http-equiv='refresh' content='3; URL=team.php?t_id=$teamId'>");
+				}
+			}
+		}
+
+		#make_member_admin.php
+		function makeMemberAdmin(){
+
+			global $con;
+			global $lang;
+
+			if(isset($_GET['u_id']) && isset($_GET['t_id'])){
+				$userId = $_GET['u_id'];
+				$teamId = $_GET['t_id'];
+				$myId = $_SESSION['user_id'];
+				$get_role = "select role from team_members where user_id='$myId' and team_id='$teamId'";
+				$run_role = mysqli_query($con, $get_role);
+				if(mysqli_num_rows($run_role) == 1){
+					$row_role=mysqli_fetch_array($run_role);
+					if($row_role['role'] != 1){
+						echo "<div id='error'>{$lang['NO_PERMISSION']}</div>";
+						exit;
+					}
+				} else {
+					echo "<div id='error'>{$lang['NO_PERMISSION']}</div>";
+					exit;
+				}
+			}
+
+				$get_user 		= "select * from users where user_id='$userId'";
+				$run_user 		= mysqli_query($con, $get_user);
+				$row			= mysqli_fetch_array($run_user);
+
+				$user_name		= $row['user_name'];
+				$user_image		= $row['user_image'];
+
+			echo "	<p><img src='images/user_images/$user_image' width='60' height='60'></p>
+					<h2 style='margin-top:10px;'>$user_name</h2><br>
+					<h3>{$lang['MEMBER_MAKEADMIN_CONFIRM']}</h3>
+					<br />
+					<form action='' method='post'
+					<div id='delete_btn'><button name='delete'>{$lang['CONFIRM']}</button></div>
+					<div id='cancel_btn'><a href='team.php?t_id=$teamId'>{$lang['CANCEL_BUTTON']}</a></div>
+					</form>
+					<br />
+					<br />";
+
+			if(isset($_POST['delete'])){
+
+				$remove_user = "update team_members set role=1 where team_id='$teamId' and user_id='$userId'";
+				$run_delete = mysqli_query($con, $remove_user);
+
+				if($run_delete){
+				echo "<div id='success'>{$lang['USER_MADE_ADMIN']}</div><br />";
+				echo("<meta http-equiv='refresh' content='3; URL=team.php?t_id=$teamId'>");
+				}
+			}
+		}
 
 		# my_teams.php
 		function getMyTeams(){
@@ -990,10 +1155,15 @@
 				$image 			= $row['profile_image'];
 				$name		 	= $row['team_name'];
 				$description 		= $row['description'];
+				$inviteLink = "http://wesl.one/jointeam.php?t_id={$team_id}";
+				if($image == ''){
+					$image = "default.jpg";
+				}
 
 				echo "	<p class='clearfix'><img src='images/team_images/$image' width='100' height='100' /></p>
 						<br />
 						<p><h3><b>$name</b></h3> </p>
+						<p>Invite Link: $inviteLink</p><br>
 						<p>$description</p><br>
 						<a href='edit_team.php?t_id=$team_id'><button>{$lang['EDIT_TEAM']}</button></a>";
 			}
@@ -1299,8 +1469,11 @@
 				$create = "insert into teams (team_name, description, creator_id, created_at, profile_image) values ('$team_name', '$team_desc', '$user_id',NOW(), '$t_image')";
 				//echo $create; exit(0);
 				$run = mysqli_query($con, $create);
-
+				$teamId = mysqli_insert_id($con);
 				if($run){
+					$addMember = "insert into team_members (user_id, team_id, created_at, role) values ('$user_id', '$teamId',NOW(), 1)";
+					//echo $create; exit(0);
+					$run = mysqli_query($con, $addMember);
 
 					echo "<div id='success'>{$lang['CREATE_TEAM_SUCCESS']}</div><br />";
 					echo("<meta http-equiv='refresh' content='2'>");
@@ -1834,6 +2007,40 @@
 						echo "<div id='error'>{$lang['SEND_MESSAGE_ERROR3']}</div><br />";
 					}
 				}
+			}
+		}
+
+		#jointeam.php
+		function addUserInTeam($teamId){
+			global $con;
+			global $lang;
+
+			$user		= $_SESSION['user_email'];
+			$get_user 	= "select * from users where user_email='$user'";
+			$run_user 	= mysqli_query($con, $get_user);
+			$row		= mysqli_fetch_array($run_user);
+
+			$user_id 	= $row['user_id'];
+
+			$get_team 	= "select * from teams where team_id='$teamId'";
+			$run_team 	= mysqli_query($con, $get_team);
+			if(mysqli_num_rows($run_team) == 1){
+				$get_member 	= "select * from team_members where team_id='$teamId' and user_id='$user_id';";
+				$run_member 	= mysqli_query($con, $get_member);
+				if(mysqli_num_rows($run_member) == 1){
+					echo "<div id='error'>{$lang['ALLREADY_IN_TEAM']}</div><br />";
+				} else {
+					$insert = "insert into team_members (user_id, team_id, created_at, role) values ('$user_id', '$teamId', NOW(), 0)";
+					$run_insert = mysqli_query($con, $insert);
+					if($run_insert){
+						header("Location: team.php?t_id={$teamId}&just_joined=1");
+					}
+					else {
+						echo "<div id='error'>{$lang['MESSAGE_INVALID_LINK']}</div><br />";
+					}
+				}
+			} else {
+				echo "<div id='error'>{$lang['MESSAGE_INVALID_LINK']}</div><br />";
 			}
 		}
 

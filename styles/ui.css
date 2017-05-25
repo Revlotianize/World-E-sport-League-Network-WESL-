@@ -209,3 +209,7 @@
 	font-family:tahoma,arial,courier;
 	font-size:120%;
 }
+h3 .small{
+	font-size: 12px;
+	color: #5f5f5f;
+}

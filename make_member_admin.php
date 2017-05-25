@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><?php echo $lang['PAGE_TITLE_PROFILE']; ?></title>
+		<title><?php echo $lang['PAGE_TITLE_DELETE_POST']; ?></title>
 		<link rel="stylesheet" type="text/css" href="styles/main.css">
 		<link rel="stylesheet" type="text/css" href="styles/ui.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,19 +34,9 @@
 		</aside>
 		<section>
 			<article>
-				<h3><?php echo $lang['TEAM_CONTENT_TITLE']; ?></h3>
+				<h3><?php echo $lang['REMOVE_MEMBER_FROM_TEAM_TITLE']; ?></h3>
 				<hr />
-				<?php teamProfile(); ?>
-			</article>
-			<article>
-				<h3><?php echo $lang['TEAM_MEMBERS_TITLE']; ?></h3>
-				<hr />
-				<?php if(isset($_GET['just_joined']) && $_GET['just_joined'] == "1"){ ?>
-					<div id="success">
-						<?php echo $lang['TEAM_JOINED']; ?>
-					</div>
-				<?php } ?>
-				<?php getTeamMembers(); ?>
+				<?php makeMemberAdmin(); ?>
 			</article>
 		</section>
 		<?php include("template/footer.html"); ?>

@@ -48,6 +48,8 @@
 	$lang['EDIT_BUTTON'] = 'Edit';
 	$lang['CANCEL_BUTTON'] = 'Cancel';
 	$lang['DELETE_BUTTON'] = 'Delete';
+	$lang['REMOVE_BUTTON'] = 'Remove';
+	$lang['CONFIRM'] = 'Confirm';
 	$lang['SEND_MSG'] = 'Send Message';
 	$lang['FIRST_PAGE_BUTTON'] = 'First Page';
 	$lang['LAST_PAGE_BUTTON'] = 'Last Page';
@@ -81,6 +83,14 @@
 	$lang['REPLY_MESSAGE_ERROR1'] = 'Please enter a reply';
 	$lang['CREATE_TEAM_SUCCESS'] = 'Team created successfully!';
 	$lang['UPDATE_TEAM_SUCCESS'] = 'Team updated successfully!';
+	$lang['MESSAGE_INVALID_LINK'] = 'Invalid Link!';
+	$lang['ALLREADY_IN_TEAM'] = 'You are already a member of this team!';
+	$lang['TEAM_JOINED'] = 'You have successfully joined the team!';
+	$lang['MEMBER_REMOVE_CONFIRM'] = 'Please confirm that you want to remove this member from the team!';
+	$lang['USER_REMOVED_FROM_TEAM'] = 'Member has been removed from the team.';
+	$lang['USER_MADE_ADMIN'] = 'Member has been made an admin of the team';
+	$lang['NO_PERMISSION'] = "You do not have the permissions.";
+	$lang['MEMBER_MAKEADMIN_CONFIRM'] = 'Please confirm that you want to make this member as admin of the team';
 
 	# SEARCH TEMPLATE
 	$lang['SEARCH_BUTTON'] = 'Search';
@@ -101,6 +111,7 @@
 	$lang['TOPICS_CONTENT_TITLE'] = 'All posts in ';
 	$lang['USERLIST_CONTENT_TITLE'] = 'User List';
 	$lang['DELETE_POST_CONTENT_TITLE'] = 'Delete Post';
+	$lang['REMOVE_MEMBER_FROM_TEAM_TITLE'] = 'Remove member from team';
 	$lang['SEARCH_CONTENT_TITLE'] = 'Search results for ';
 	$lang['EDIT_PROFILE_CONTENT_TITLE'] = 'Edit Profile';
 	$lang['CREATE_TEAM_CONTENT_TITLE'] = 'Create Team';
