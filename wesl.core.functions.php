@@ -29,7 +29,7 @@
 			}
 			include_once 'locale/'.$lang_file;
 
-		function login(){
+		function login($teamId){
 
 		global $con;
 		global $lang;
@@ -45,10 +45,20 @@
 
 				if($check==1){
 					$users = mysqli_fetch_array($run_user);
+
 					$_SESSION['user_email']=$email;
-					$_SESSION['user_id']=$users['user_id'];
-					echo "<script>window.open('index.php','_self')</script>";
-					#echo "<meta http-equiv='refresh' content='0'>";
+					$_SESSION['user_id'] = $users['user_id'];
+					if(isset($teamId) && $teamId != 0){
+						$addMember = "insert into team_members (user_id, team_id, role, created_at) values ({$_SESSION['user_id']}, {$teamId}, 0, NOW())";
+						$run_member = mysqli_query($con, $addMember);
+						if($run_member){
+								echo "<script>window.open('team.php?t_id={$teamId}&just_joined=1','_self')</script>";
+						}
+					} else {
+						echo "<script>window.open('index.php','_self')</script>";
+						#echo "<meta http-equiv='refresh' content='0'>";
+					}
+
 				}
 				else {
 				echo "<font color='darkorange'>Email/Password is not correct!</font>";
@@ -56,7 +66,7 @@
 			}
 		}
 
-		function newUser(){
+		function newUser($teamId){
 
 		global $con;
 		global $lang;
@@ -101,13 +111,21 @@
 				else {
 
 					$insert = "insert into users (user_name,user_pass,user_email,user_country,user_gender,user_bday,user_image,register_date,last_login,status) values ('$name','$pass','$email','$country','$gender','$bday','default.jpg',NOW(),NOW(),'unverified')";
-					$run_insert = mysqli_query($con, $insert); {
+					$run_insert = mysqli_query($con, $insert);
 
-						if($run_insert){
+					if($run_insert){
 						$_SESSION['user_email']=$email;
-						echo "<script>alert('Registration successful!')</script>";
-						echo "<script>window.open('index.php','_self')</script>";
-						#echo "<meta http-equiv='refresh' content='0'>";
+						$_SESSION['user_id'] = mysqli_insert_id($con);
+						if(isset($teamId) && $teamId != 0){
+							$addMember = "insert into team_members (user_id, team_id, role, created_at) values ({$_SESSION['user_id']}, {$teamId}, 0, NOW())";
+							$run_member = mysqli_query($con, $addMember);
+							if($run_member){
+									echo "<script>window.open('team.php?t_id={$teamId}&just_joined=1','_self')</script>";
+							}
+						} else {
+							echo "<script>alert('Registration successful!')</script>";
+							echo "<script>window.open('index.php','_self')</script>";
+							#echo "<meta http-equiv='refresh' content='0'>";
 						}
 					}
 				}
@@ -857,6 +875,7 @@
 		function getTeamMembers(){
 
 		global $con;
+		global $lang;
 		if(isset($_GET['t_id'])){
 				$myId = $_SESSION['user_id'];
 				$team_id = $_GET['t_id'];
@@ -894,11 +913,16 @@
 				$str .= "</h3>";
 				if($iAmAdmin && $user_id != $myId){
 					$str .= "<div class='action-links'>
-						<a href='remove_member.php?u_id={$user_id}&t_id=$team_id'>Remove</a>&nbsp;.&nbsp;<a href='make_member_admin.php?u_id={$user_id}&t_id=$team_id'>Make Admin</a>&nbsp;.&nbsp;
-					</div>";
+						<a href='remove_member.php?u_id={$user_id}&t_id=$team_id'>{$lang['REMOVE_BUTTON']}</a>&nbsp;.&nbsp;";
+					if($role == 1){
+						$str .= "<a href='make_member_admin.php?u_id={$user_id}&t_id={$team_id}&is_revoke=1'>{$lang['REVOKE_ADMIN']}</a>&nbsp;.&nbsp;";
+					} else {
+						$str .= "<a href='make_member_admin.php?u_id={$user_id}&t_id=$team_id'>{$lang['MAKE_ADMIN']}</a>&nbsp;.&nbsp;";
+					}
+					$str .= "</div>";
 				} else if($user_id == $myId){
 					$str .= "<div class='action-links'>
-						<a>Leave Group</a>
+						<a href='leave_team.php?t_id=$team_id'>Leave Group</a>
 					</div>";
 				}
 				$str .= "<p></p>
@@ -963,6 +987,66 @@
 			}
 		}
 
+		#leave_team.php
+		function leaveTeam(){
+
+			global $con;
+			global $lang;
+
+			if(isset($_GET['t_id'])){
+				$teamId = $_GET['t_id'];
+				$myId = $_SESSION['user_id'];
+				$get_role = "select role from team_members where user_id='$myId' and team_id='$teamId'";
+				$run_role = mysqli_query($con, $get_role);
+				if(mysqli_num_rows($run_role) == 1){
+					$row_role=mysqli_fetch_array($run_role);
+					if($row_role['role'] == 1){
+						$get_admins = "select * from team_members where team_id='$teamId' and role=1";
+						$run_admins = mysqli_query($con, $get_admins);
+						if(mysqli_num_rows($run_admins) == 1){
+							echo "<div id='error'>{$lang['LEAVE_GROUP_ERR']}</div>";
+							exit;
+						}
+					}
+				} else {
+					echo "<div id='error'>{$lang['NO_PERMISSION']}</div>";
+					exit;
+				}
+			}
+
+				$get_team 		= "select * from teams where team_id='$teamId'";
+				$run_team 		= mysqli_query($con, $get_team);
+				$row			= mysqli_fetch_array($run_team);
+
+				$team_name		= $row['team_name'];
+				$team_image		= $row['profile_image'];
+				if($team_image == ""){
+					$team_image = "default.jpg";
+				}
+
+			echo "	<p><img src='images/team_images/$team_image' width='60' height='60'></p>
+					<h2 style='margin-top:10px;'>$team_name</h2><br>
+					<h3>{$lang['LEAVE_TEAM_CONFIRM']}</h3>
+					<br />
+					<form action='' method='post'
+					<div id='delete_btn'><button name='delete'>{$lang['LEAVE_BUTTON']}</button></div>
+					<div id='cancel_btn'><a href='team.php?t_id=$teamId'>{$lang['CANCEL_BUTTON']}</a></div>
+					</form>
+					<br />
+					<br />";
+
+			if(isset($_POST['delete'])){
+
+				$remove_user = "delete from team_members where team_id='$teamId' and user_id='$myId'";
+				$run_delete = mysqli_query($con, $remove_user);
+
+				if($run_delete){
+				echo "<div id='success'>{$lang['LEAVE_TEAM_SUCCESS']}</div><br />";
+				echo("<meta http-equiv='refresh' content='3; URL=team.php?t_id=$teamId'>");
+				}
+			}
+		}
+
 		#make_member_admin.php
 		function makeMemberAdmin(){
 
@@ -972,6 +1056,7 @@
 			if(isset($_GET['u_id']) && isset($_GET['t_id'])){
 				$userId = $_GET['u_id'];
 				$teamId = $_GET['t_id'];
+				$isRevoke = isset($_GET['is_revoke']) ? $_GET['is_revoke'] : 0;
 				$myId = $_SESSION['user_id'];
 				$get_role = "select role from team_members where user_id='$myId' and team_id='$teamId'";
 				$run_role = mysqli_query($con, $get_role);
@@ -994,24 +1079,38 @@
 				$user_name		= $row['user_name'];
 				$user_image		= $row['user_image'];
 
-			echo "	<p><img src='images/user_images/$user_image' width='60' height='60'></p>
-					<h2 style='margin-top:10px;'>$user_name</h2><br>
-					<h3>{$lang['MEMBER_MAKEADMIN_CONFIRM']}</h3>
-					<br />
+			$str = "	<p><img src='images/user_images/$user_image' width='60' height='60'></p>
+					<h2 style='margin-top:10px;'>$user_name</h2><br>";
+			if($isRevoke){
+					$str .="<h3>{$lang['MEMBER_REVOKEADMIN_CONFIRM']}</h3>";
+			} else {
+					$str .="<h3>{$lang['MEMBER_MAKEADMIN_CONFIRM']}</h3>";
+			}
+			$str .= "<br />
 					<form action='' method='post'
 					<div id='delete_btn'><button name='delete'>{$lang['CONFIRM']}</button></div>
 					<div id='cancel_btn'><a href='team.php?t_id=$teamId'>{$lang['CANCEL_BUTTON']}</a></div>
 					</form>
 					<br />
 					<br />";
+			echo $str;
 
 			if(isset($_POST['delete'])){
+				if($isRevoke){
+					$remove_user = "update team_members set role=0 where team_id='$teamId' and user_id='$userId'";
+				} else {
+						$remove_user = "update team_members set role=1 where team_id='$teamId' and user_id='$userId'";
+				}
 
-				$remove_user = "update team_members set role=1 where team_id='$teamId' and user_id='$userId'";
 				$run_delete = mysqli_query($con, $remove_user);
 
 				if($run_delete){
-				echo "<div id='success'>{$lang['USER_MADE_ADMIN']}</div><br />";
+					if($isRevoke){
+						echo "<div id='success'>{$lang['USER_ADMIN_REVOKED']}</div><br />";
+					} else {
+							echo "<div id='success'>{$lang['USER_MADE_ADMIN']}</div><br />";
+					}
+
 				echo("<meta http-equiv='refresh' content='3; URL=team.php?t_id=$teamId'>");
 				}
 			}
@@ -1028,7 +1127,7 @@
 
 		$user_id		= $row['user_id'];
 
-			$get_teams = "select * from teams where creator_id={$user_id};";
+			$get_teams = "select teams.team_id as team_id, team_name, description, profile_image from teams JOIN team_members ON team_members.user_id={$user_id} and team_members.team_id=teams.team_id;";
 			$run_teams = mysqli_query($con,$get_teams);
 
 			while($row	= mysqli_fetch_array($run_teams)){
@@ -1146,6 +1245,7 @@
 			if(isset($_GET['t_id'])){
 
 				$team_id = $_GET['t_id'];
+				$myId = $_SESSION['user_id'];
 
 				$select = "select * from teams where team_id='$team_id'";
 				$run = mysqli_query($con,$select);
@@ -1159,13 +1259,17 @@
 				if($image == ''){
 					$image = "default.jpg";
 				}
-
+				$select = "select * from team_members where team_id='$team_id' and user_id='$myId' and role=1";
+				$run = mysqli_query($con,$select);
+				$iAmAdmin = mysqli_num_rows($run);
 				echo "	<p class='clearfix'><img src='images/team_images/$image' width='100' height='100' /></p>
 						<br />
 						<p><h3><b>$name</b></h3> </p>
 						<p>Invite Link: $inviteLink</p><br>
-						<p>$description</p><br>
-						<a href='edit_team.php?t_id=$team_id'><button>{$lang['EDIT_TEAM']}</button></a>";
+						<p>$description</p><br><br>";
+				if($iAmAdmin == 1){
+					echo "<a href='edit_team.php?t_id=$team_id'><button>{$lang['EDIT_TEAM']}</button></a>";
+				}
 			}
 		}
 
@@ -1482,27 +1586,53 @@
 			}
 		}
 
-		# update_team.php
+		function nonUserJoinTeam($teamId){
+			global $con;
+			global $lang;
+			$get_team 		= "select * from teams where team_id='$teamId'";
+			$run_team 		= mysqli_query($con, $get_team);
+			$check = mysqli_num_rows($run_team);
+			if($check == 1){
+					$row			= mysqli_fetch_array($run_team);
+					$image = $row['profile_image'];
+					$team_name= $row['team_name'];
+					if($image == ""){
+						$image = "default.jpg";
+					}
+					echo "	<p class='clearfix'><img src='images/team_images/$image' width='100' height='100' /></p>
+							<br />
+							<p><h3><b>$team_name</b></h3> </p>
+							<p>{$lang['NON_USER_JOIN_TEAM']}</p><br>";
+			}
+		}
+
+		# edit_team.php
 		function updateTeam(){
 
 		global $con;
 		global $lang;
 		if(isset($_GET['t_id'])){
 			$team_id = $_GET['t_id'];
-			$user			= $_SESSION['user_email'];
-			$get_user 		= "select * from users where user_email='$user'";
-			$run_user 		= mysqli_query($con, $get_user);
-			$row			= mysqli_fetch_array($run_user);
-			$user_id		= $row['user_id'];
+			$user_id = $_SESSION['user_id'];
 
-			$get_team 		= "select * from teams where team_id='$team_id' and creator_id='$user_id'";
-			$run_team 		= mysqli_query($con, $get_team);
-			$row			= mysqli_fetch_array($run_team);
+			$get_role 		= "select * from team_members where user_id='$user_id' && team_id='$team_id'";
+			$run_role 		= mysqli_query($con, $get_role);
+			$check = mysqli_num_rows($run_role);
+			$row			= mysqli_fetch_array($run_role);
 
-			$team_id = $row['team_id'];
-			$team_name = $row['team_name'];
-			$team_desc = $row['description'];
-			$profile_image = $row['profile_image'];
+			if($check == 1 && $row['role'] == 1){
+				$get_team 		= "select * from teams where team_id='$team_id'";
+				$run_team 		= mysqli_query($con, $get_team);
+				$row			= mysqli_fetch_array($run_team);
+
+				$team_id = $row['team_id'];
+				$team_name = $row['team_name'];
+				$team_desc = $row['description'];
+				$profile_image = $row['profile_image'];
+			} else {
+				echo "<div id='error'>{$lang['NO_PERMISSION']}</div>";
+				exit;
+			}
 
 			echo "	<form action='' method='post' enctype='multipart/form-data'>
 					<table>

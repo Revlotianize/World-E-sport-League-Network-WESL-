@@ -1,10 +1,13 @@
+<?php
+	$teamId = isset($team_id) ? $team_id : 0;
+?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>WeSL</title>
 		<link rel="stylesheet" href="styles/splash.css" media="all"/>
 	</head>
-	
+
 <body>
 	<!-- container start -->
 	<div class="container">
@@ -14,10 +17,10 @@
 			<div id="header">
 				<a href="https://wesl.one">World eSports League Network</a>
 				<form method="post" action="" id="form1">
-					<?php login(); ?>
+					<?php login($teamId); ?>
 					<input type="email" name="email" placeholder="Email" required="required"/>
 					<input type="password" name="pass" placeholder="Password" required="required"/>
-					<button name="login">Login</button> 
+					<button name="login">Login</button>
 				</form>
 			</div>
 			<!-- header end -->
@@ -26,10 +29,16 @@
 		<!-- content start -->
 		<div id="content">
 			<div>
-				<img src="images/splash.jpg" style="float:left;"/>
+				<img src="images/splash.jpg" style="float:left;width:50%;"/>
 			</div>
-				<form action="" method="post" id="form2">
-				<?php newUser(); ?>
+			<div id="form2">
+				<?php
+					if($teamId != 0){
+						nonUserJoinTeam($teamId);
+					}
+				?>
+				<form action="" method="post">
+				<?php newUser($teamId); ?>
 					<table>
 						<tr>
 							<td></td>
@@ -84,6 +93,7 @@
 						</tr>
 					</table>
 				</form>
+			</div>
 		</div>
 		 <!-- content end -->
 	</div>

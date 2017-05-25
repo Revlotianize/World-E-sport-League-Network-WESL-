@@ -49,6 +49,7 @@
 	$lang['CANCEL_BUTTON'] = 'Cancel';
 	$lang['DELETE_BUTTON'] = 'Delete';
 	$lang['REMOVE_BUTTON'] = 'Remove';
+	$lang['LEAVE_BUTTON'] = 'Leave';
 	$lang['CONFIRM'] = 'Confirm';
 	$lang['SEND_MSG'] = 'Send Message';
 	$lang['FIRST_PAGE_BUTTON'] = 'First Page';
@@ -62,6 +63,8 @@
 	$lang['CREATE_TEAM'] = 'Create Team';
 	$lang['UPDATE_TEAM'] = 'Update Team';
 	$lang['EDIT_TEAM'] = 'Edit Team Details';
+	$lang['MAKE_ADMIN'] = 'Make Admin';
+	$lang['REVOKE_ADMIN'] = 'Revoke Admin Permission';
 
 	# ERROR / SUCCESS MESSAGES
 	$lang['POST_TIMELINE_SUCCESS'] = 'Posted to timeline!';
@@ -89,8 +92,14 @@
 	$lang['MEMBER_REMOVE_CONFIRM'] = 'Please confirm that you want to remove this member from the team!';
 	$lang['USER_REMOVED_FROM_TEAM'] = 'Member has been removed from the team.';
 	$lang['USER_MADE_ADMIN'] = 'Member has been made an admin of the team';
+	$lang['USER_ADMIN_REVOKED'] = 'Admin permissions have been revoked for the user';
 	$lang['NO_PERMISSION'] = "You do not have the permissions.";
-	$lang['MEMBER_MAKEADMIN_CONFIRM'] = 'Please confirm that you want to make this member as admin of the team';
+	$lang['MEMBER_MAKEADMIN_CONFIRM'] = 'Please confirm that you want to make this member an admin of the team';
+	$lang['MEMBER_REVOKEADMIN_CONFIRM'] = 'Please confirm that you want to revoke admin permissions for this member';
+	$lang['LEAVE_GROUP_ERR'] = "You cannot leave the group as there is no other admin. Please grant admin permissions to a member before leaving.";
+	$lang['LEAVE_TEAM_CONFIRM'] = "Please confirm that you want to leave this group";
+	$lang['LEAVE_TEAM_SUCCESS'] = "You have successfully left the team";
+	$lang['NON_USER_JOIN_TEAM'] = 'To join this team, kindly sign up now! Log In if you already have an account';
 
 	# SEARCH TEMPLATE
 	$lang['SEARCH_BUTTON'] = 'Search';
@@ -122,5 +131,6 @@
 	$lang['MESSAGES_OUT_CONTENT_TITLE'] = 'Outbox';
 	$lang['TEAM_CONTENT_TITLE'] = 'Team Details';
 	$lang['TEAM_MEMBERS_TITLE'] = 'Team Members';
+	$lang['LEAVE_TEAM'] = 'Leave Team';
 
 ?>
