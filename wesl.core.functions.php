@@ -1,6 +1,6 @@
 <?php
 
-	$con = mysqli_connect("localhost", "root", "", "wesl_one") or die ("Connection was not established");
+	$con = mysqli_connect("localhost", "root", "welcome@123", "wesl_one") or die ("Connection was  fvdvd not established");
 
 			if(isset($_GET['lang'])){
 				$lang = $_GET['lang'];
